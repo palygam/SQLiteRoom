@@ -47,12 +47,10 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 editTextAge.setError("Enter your age");
             }
-
             if (TextUtils.isEmpty(lastName)) {
                 editTextLastName.setError("Enter your last name");
                 return;
             }
-
             startActivity(buildIntent());
         });
     }
