@@ -3,7 +3,6 @@ package com.example.sqliteorm;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         lastNameWrapper = findViewById(R.id.last_name_wrapper);
-/* firstNameWrapper = findViewById(R.id.first_name_wrapper);
-middleNameWrapper = findViewById(R.id.middle_name_wrapper);*/
         ageWrapper = findViewById(R.id.age_wrapper);
         textInputLastName = findViewById(R.id.text_input_last_name);
         textInputFirstName = findViewById(R.id.text_input_first_name);

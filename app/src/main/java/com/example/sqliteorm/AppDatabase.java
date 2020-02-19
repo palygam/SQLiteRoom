@@ -20,14 +20,14 @@ public abstract class AppDatabase extends RoomDatabase {
         return allContacts;
     }
 
-
     private static AppDatabase INSTANCE;
 
-
-    public static AppDatabase getINSTANCE() {
+    public synchronized static AppDatabase getINSTANCE(Context context) {
+        if (INSTANCE == null) {
+            INSTANCE = getDatabase(context);
+        }
         return INSTANCE;
     }
-
 
     static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
@@ -35,24 +35,20 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "table_contacts")
-                            .addCallback(roomDatabaseCallback)
+                            .addCallback(new Callback() {
+                                @Override
+                                public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                                    super.onCreate(db);
+                                    getINSTANCE(context).contactDao().insert(new Contact("Petrov", "Petr", "Petrovich", 32));
+                                }
+
+                                ;
+                            })
                             .build();
                 }
             }
         }
         return INSTANCE;
     }
-
-
-    private static RoomDatabase.Callback roomDatabaseCallback = new RoomDatabase.Callback() {
-        @Override
-        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
-            ContactDao dao = INSTANCE.contactDao();
-            dao.getAlphabetizedContacts();
-        }
-
-        ;
-    };
-
 }
+

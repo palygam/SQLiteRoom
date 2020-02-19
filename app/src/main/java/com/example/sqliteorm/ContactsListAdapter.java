@@ -82,19 +82,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapter.ContactViewHolder> {
-
     private Context context;
-    private final LayoutInflater inflater;
     private List<Contact> contacts;
 
-    ContactsListAdapter(Context context, List<Contact> contacts) {
-        this.context = context;
+    public ContactsListAdapter(List<Contact> contacts) {
         this.contacts = contacts;
-        inflater = LayoutInflater.from(context);
     }
 
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        final LayoutInflater inflater = LayoutInflater.from(context);
         View itemView = inflater.inflate(R.layout.recycler_view, parent, false);
         return new ContactViewHolder(itemView);
     }
@@ -119,11 +116,6 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
     @Override
     public int getItemCount() {
         return contacts.size();
-    }
-
-    void updateData(List<Contact> contacts) {
-        this.contacts = contacts;
-        notifyDataSetChanged();
     }
 
     class ContactViewHolder extends RecyclerView.ViewHolder {

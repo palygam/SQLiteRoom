@@ -4,13 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ShowDatabaseActivity extends AppCompatActivity {
+    private List<Contact> allContacts;
     private ContactsListAdapter adapter;
     private ContactDao contactDao;
 
@@ -37,13 +41,10 @@ public class ShowDatabaseActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        final ContactsListAdapter adapter = new ContactsListAdapter(this, new ArrayList<Contact>());
+        final ContactsListAdapter adapter = new ContactsListAdapter(new ArrayList<>());
+        adapter.notifyDataSetChanged();
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
-    }
-
-    private void loadContacts() {
-        adapter.updateData(contactDao.getAlphabetizedContacts());
     }
 
     private void unpack(Intent intent) {
@@ -57,13 +58,12 @@ public class ShowDatabaseActivity extends AppCompatActivity {
         Thread backgroundThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ContactDao dao = AppDatabase.getINSTANCE().contactDao();
-                dao.insert(contact);
-                loadContacts();
+                AppDatabase.getINSTANCE(ShowDatabaseActivity.this).contactDao().insert(contact);
+                AppDatabase.getINSTANCE(ShowDatabaseActivity.this).contactDao().getAlphabetizedContacts();
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        dao.getAlphabetizedContacts();
+
                     }
                 });
             }
