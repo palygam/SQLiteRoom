@@ -1,56 +1,62 @@
-package com.example.sqliteorm;
 
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.sqliteorm;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.os.Handler;
 import android.widget.Button;
-import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class MainActivity extends AppCompatActivity {
-    private final static String BUNDLE_KEY1 = "message1";
-    private final static String BUNDLE_KEY2 = "message2";
-    private final static String BUNDLE_KEY3 = "message3";
-    private final static String BUNDLE_KEY4 = "message4";
-    private EditText editTextLastName;
-    private EditText editTextFirstName;
-    private EditText editTextMiddleName;
-    private EditText editTextAge;
+    private TextInputEditText textInputLastName;
+    private TextInputEditText textInputFirstName;
+    private TextInputEditText textInputMiddleName;
+    private TextInputEditText textInputAge;
     private String lastName;
     private String firstName;
     private String middleName;
     private String ageText;
     private int age;
+    private TextInputLayout lastNameWrapper;
+    private TextInputLayout ageWrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        editTextLastName = findViewById(R.id.edit_text_last_name);
-        editTextFirstName = findViewById(R.id.edit_text_first_name);
-        editTextMiddleName = findViewById(R.id.edit_text_middle_name);
-        editTextAge = findViewById(R.id.edit_text_age);
+        lastNameWrapper = findViewById(R.id.last_name_wrapper);
+/* firstNameWrapper = findViewById(R.id.first_name_wrapper);
+middleNameWrapper = findViewById(R.id.middle_name_wrapper);*/
+        ageWrapper = findViewById(R.id.age_wrapper);
+        textInputLastName = findViewById(R.id.text_input_last_name);
+        textInputFirstName = findViewById(R.id.text_input_first_name);
+        textInputMiddleName = findViewById(R.id.text_input_middle_name);
+        textInputAge = findViewById(R.id.text_input_age);
         addButtonMainActivity();
     }
 
     private void addButtonMainActivity() {
         final Button buttonSendData = findViewById(R.id.button_send);
         buttonSendData.setOnClickListener(view -> {
-            lastName = editTextLastName.getText().toString();
-            firstName = editTextFirstName.getText().toString();
-            middleName = editTextMiddleName.getText().toString();
-            ageText = editTextAge.getText().toString();
-            age = 0;
-            if (!TextUtils.isEmpty(ageText)) {
-                age = Integer.parseInt(ageText);
-            } else {
-                editTextAge.setError("Enter your age");
-            }
-            if (TextUtils.isEmpty(lastName)) {
-                editTextLastName.setError("Enter your last name");
+            lastName = String.valueOf(textInputLastName.getText());
+            firstName = textInputFirstName.getText().toString();
+            middleName = textInputMiddleName.getText().toString();
+            ageText = textInputAge.getText().toString();
+            if (lastName.isEmpty()) {
+                lastNameWrapper.setErrorEnabled(true);
+                lastNameWrapper.setError("Enter your Last Name");
                 return;
             }
+            if (ageText.isEmpty()) {
+                ageWrapper.setErrorEnabled(true);
+                ageWrapper.setError("Enter your Age");
+                return;
+            }
+            age = Integer.parseInt(ageText);
             startActivity(buildIntent());
         });
     }
@@ -58,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
     private Intent buildIntent() {
         Intent intent = new Intent(MainActivity.this, ShowDatabaseActivity.class);
         Bundle extras = new Bundle();
-        extras.putString(BUNDLE_KEY1, lastName);
-        extras.putString(BUNDLE_KEY2, firstName);
-        extras.putString(BUNDLE_KEY3, middleName);
-        extras.putInt(BUNDLE_KEY4, age);
+        extras.putString(Constants.LAST_NAME_KEY, lastName);
+        extras.putString(Constants.FIRST_NAME_KEY, firstName);
+        extras.putString(Constants.MIDDLE_NAME_KEY, middleName);
+        extras.putInt(Constants.AGE_KEY, age);
         intent.putExtras(extras);
         return intent;
     }

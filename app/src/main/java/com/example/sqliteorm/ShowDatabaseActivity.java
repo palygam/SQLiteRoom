@@ -2,19 +2,18 @@ package com.example.sqliteorm;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import java.util.ArrayList;
 
 
 public class ShowDatabaseActivity extends AppCompatActivity {
-    private final static String BUNDLE_KEY1 = "message1";
-    private final static String BUNDLE_KEY2 = "message2";
-    private final static String BUNDLE_KEY3 = "message3";
-    private final static String BUNDLE_KEY4 = "message4";
-    private PersonViewModel personViewModel;
+    private ContactsListAdapter adapter;
+    private ContactDao contactDao;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,20 +37,37 @@ public class ShowDatabaseActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        final PeopleListAdapter adapter = new PeopleListAdapter(this);
+        final ContactsListAdapter adapter = new ContactsListAdapter(this, new ArrayList<Contact>());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
-        personViewModel = new ViewModelProvider(this).get(PersonViewModel.class);
-        personViewModel.getAllPeople().observe(this, people -> adapter.setPeople(people));
+    }
+
+    private void loadContacts() {
+        adapter.updateData(contactDao.getAlphabetizedContacts());
     }
 
     private void unpack(Intent intent) {
         Bundle extras = intent.getExtras();
-        String lastName = extras.getString(BUNDLE_KEY1);
-        String firstName = extras.getString(BUNDLE_KEY2);
-        String middleName = extras.getString(BUNDLE_KEY3);
-        int age = extras.getInt(BUNDLE_KEY4);
-        Person person = new Person(lastName, firstName, middleName, age);
-        personViewModel.insert(person);
+        String lastName = extras.getString(Constants.LAST_NAME_KEY);
+        String firstName = extras.getString(Constants.FIRST_NAME_KEY);
+        String middleName = extras.getString(Constants.MIDDLE_NAME_KEY);
+        int age = extras.getInt(Constants.AGE_KEY);
+        Contact contact = new Contact(lastName, firstName, middleName, age);
+        final Handler handler = new Handler();
+        Thread backgroundThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ContactDao dao = AppDatabase.getINSTANCE().contactDao();
+                dao.insert(contact);
+                loadContacts();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        dao.getAlphabetizedContacts();
+                    }
+                });
+            }
+        });
+        backgroundThread.start();
     }
 }

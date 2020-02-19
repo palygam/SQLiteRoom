@@ -6,8 +6,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 
-@Entity(tableName = "table_people")
-public class Person {
+@Entity(tableName = "table_contacts")
+public class Contact {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -25,7 +25,7 @@ public class Person {
     private int age;
 
 
-    Person(@NonNull String lastName, String firstName, String middleName, int age) {
+    Contact(@NonNull String lastName, String firstName, String middleName, int age) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.middleName = middleName;

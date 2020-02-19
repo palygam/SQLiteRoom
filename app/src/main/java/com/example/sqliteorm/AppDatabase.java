@@ -8,24 +8,33 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.List;
 
-@Database(entities = {Person.class}, version = 1, exportSchema = false)
+@Database(entities = {Contact.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
-    public abstract PersonDao personDao();
+    public abstract ContactDao contactDao();
+
+    private List<Contact> allContacts;
+
+    List<Contact> getAllContacts() {
+        return allContacts;
+    }
+
 
     private static AppDatabase INSTANCE;
-    private static final int NUMBER_OF_THREADS = 2;
-    static final ExecutorService executorService =
-            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+
+
+    public static AppDatabase getINSTANCE() {
+        return INSTANCE;
+    }
+
 
     static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, "table_people")
+                            AppDatabase.class, "table_contacts")
                             .addCallback(roomDatabaseCallback)
                             .build();
                 }
@@ -39,10 +48,11 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-            executorService.execute(() -> {
-                PersonDao dao = INSTANCE.personDao();
-                dao.getAlphabetizedPeople();
-            });
+            ContactDao dao = INSTANCE.contactDao();
+            dao.getAlphabetizedContacts();
         }
+
+        ;
     };
+
 }
