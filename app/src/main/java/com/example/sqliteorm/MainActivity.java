@@ -3,6 +3,10 @@ package com.example.sqliteorm;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,18 +14,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private TextInputEditText textInputLastName;
     private TextInputEditText textInputFirstName;
     private TextInputEditText textInputMiddleName;
     private TextInputEditText textInputAge;
-    private String lastName;
-    private String firstName;
-    private String middleName;
-    private String ageText;
     private int age;
     private TextInputLayout lastNameWrapper;
     private TextInputLayout ageWrapper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,21 +43,14 @@ public class MainActivity extends AppCompatActivity {
     private void addButtonMainActivity() {
         final Button buttonSendData = findViewById(R.id.button_send);
         buttonSendData.setOnClickListener(view -> {
-            lastName = String.valueOf(textInputLastName.getText());
-            firstName = textInputFirstName.getText().toString();
-            middleName = textInputMiddleName.getText().toString();
-            ageText = textInputAge.getText().toString();
-            if (lastName.isEmpty()) {
-                lastNameWrapper.setErrorEnabled(true);
+            if (textInputLastName.getText().toString().isEmpty()) {
                 lastNameWrapper.setError("Enter your Last Name");
                 return;
-            }
-            if (ageText.isEmpty()) {
-                ageWrapper.setErrorEnabled(true);
+            } else if (TextUtils.isEmpty(textInputAge.getText())) {
                 ageWrapper.setError("Enter your Age");
                 return;
             }
-            age = Integer.parseInt(ageText);
+            age = Integer.parseInt(String.valueOf(textInputAge.getText()));
             startActivity(buildIntent());
         });
     }
@@ -61,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
     private Intent buildIntent() {
         Intent intent = new Intent(MainActivity.this, ShowDatabaseActivity.class);
         Bundle extras = new Bundle();
-        extras.putString(Constants.LAST_NAME_KEY, lastName);
-        extras.putString(Constants.FIRST_NAME_KEY, firstName);
-        extras.putString(Constants.MIDDLE_NAME_KEY, middleName);
+        extras.putString(Constants.LAST_NAME_KEY, textInputLastName.getText().toString());
+        extras.putString(Constants.FIRST_NAME_KEY, textInputFirstName.getText().toString());
+        extras.putString(Constants.MIDDLE_NAME_KEY, textInputMiddleName.getText().toString());
         extras.putInt(Constants.AGE_KEY, age);
         intent.putExtras(extras);
         return intent;

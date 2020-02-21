@@ -3,6 +3,7 @@
     package="com.example.sqliteorm">
 
     <application
+        android:name=".CustomApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
