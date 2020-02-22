@@ -15,12 +15,12 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
     private List<Contact> contacts;
     private LayoutInflater inflater;
 
-    public LayoutInflater getInflater() {
-        return inflater;
+    void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
+        notifyDataSetChanged();
     }
 
-    public ContactsListAdapter(@NonNull List<Contact> contacts, Context context) {
-        this.contacts = contacts;
+    public ContactsListAdapter(Context context) {
         inflater = LayoutInflater.from(context);
         this.context = context;
     }
@@ -50,7 +50,9 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
 
     @Override
     public int getItemCount() {
-        return contacts.size();
+        if (contacts != null)
+            return contacts.size();
+        else return 0;
     }
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
@@ -82,11 +84,6 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
             contactMiddleNameView = itemView.findViewById(R.id.middle_name_text_view);
             contactAgeView = itemView.findViewById(R.id.age_text_view);
         }
-    }
-
-    public void addContact(Contact contact) {
-        contacts.add(contact);
-        notifyDataSetChanged();
     }
 }
 
