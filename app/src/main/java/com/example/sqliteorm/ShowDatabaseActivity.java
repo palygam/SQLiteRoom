@@ -13,10 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShowDatabaseActivity extends AppCompatActivity {
-    public ContactsListAdapter adapter;
     private ViewGroup parent;
-    RecyclerView recyclerView;
-    List<Contact> contacts = new ArrayList<>();
+    private List<Contact> contacts = new ArrayList<>();
 
 
     @Override
@@ -40,8 +38,8 @@ public class ShowDatabaseActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        recyclerView = findViewById(R.id.recycler_view);
-        adapter = new ContactsListAdapter(ShowDatabaseActivity.this);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        ContactListAdapter adapter = new ContactsListAdapter(ShowDatabaseActivity.this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
     }
