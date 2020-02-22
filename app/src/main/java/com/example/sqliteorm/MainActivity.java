@@ -1,21 +1,12 @@
-
 package com.example.sqliteorm;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private TextInputEditText textInputLastName;
@@ -46,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
             if (textInputLastName.getText().toString().isEmpty()) {
                 lastNameWrapper.setError("Enter your Last Name");
                 return;
-            } else if (TextUtils.isEmpty(textInputAge.getText())) {
+            }
+            if (TextUtils.isEmpty(textInputAge.getText())) {
                 ageWrapper.setError("Enter your Age");
                 return;
             }

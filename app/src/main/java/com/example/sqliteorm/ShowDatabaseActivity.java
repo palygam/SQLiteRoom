@@ -57,7 +57,7 @@ public class ShowDatabaseActivity extends AppCompatActivity {
                 int age = extras.getInt(Constants.AGE_KEY);
                 Contact contact = new Contact(lastName, firstName, middleName, age);
                 AppDatabase.getINSTANCE(ShowDatabaseActivity.this).contactDao().insert(contact);
-                AppDatabase.getINSTANCE(ShowDatabaseActivity.this).contactDao().getAlphabetizedContacts();
+                AppDatabase.getINSTANCE(ShowDatabaseActivity.this).contactDao().getAll();
                 getTableData();
                 handler.post(new Runnable() {
                     @Override
@@ -73,7 +73,7 @@ public class ShowDatabaseActivity extends AppCompatActivity {
     private void getTableData() {
         View itemView = adapter.getInflater().inflate(R.layout.recycler_view, parent, false);
         ContactsListAdapter.ContactViewHolder holder = adapter.new ContactViewHolder(itemView);
-        String[] tableData = AppDatabase.getINSTANCE(ShowDatabaseActivity.this).contactDao().getAlphabetizedContacts().toString().split(" ");
+        String[] tableData = AppDatabase.getINSTANCE(ShowDatabaseActivity.this).contactDao().getAll().toString().split(" ");
         for (int i = 0; i < tableData.length; i++) {
             int test = i % 4;
             StringBuilder sb = new StringBuilder(tableData[i]);
@@ -92,3 +92,9 @@ public class ShowDatabaseActivity extends AppCompatActivity {
         }
     }
 }
+
+
+
+
+
+

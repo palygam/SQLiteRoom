@@ -41,10 +41,10 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
             holder.contactMiddleNameView.setText(currentContact.getMiddleName());
             holder.contactAgeView.setText(Integer.toString(currentContact.getAge()));
         } else {
-            holder.contactLastNameView.setText("No information");
-            holder.contactFirstNameView.setText("No information");
-            holder.contactMiddleNameView.setText("No information");
-            holder.contactAgeView.setText("No information");
+            holder.contactLastNameView.setText(context.getResources().getString(R.string.no_information));
+            holder.contactFirstNameView.setText(context.getResources().getString(R.string.no_information));
+            holder.contactMiddleNameView.setText(context.getResources().getString(R.string.no_information));
+            holder.contactAgeView.setText(context.getResources().getString(R.string.no_information));
         }
     }
 
@@ -89,9 +89,6 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
         notifyDataSetChanged();
     }
 }
-
-
-
 
 
 
