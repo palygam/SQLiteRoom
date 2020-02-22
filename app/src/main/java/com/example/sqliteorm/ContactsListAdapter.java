@@ -15,7 +15,7 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
     private List<Contact> contacts;
     private LayoutInflater inflater;
 
-    void setContacts(List<Contact> contacts) {
+    public void setContacts(@NotNull List<Contact> contacts) {
         this.contacts = contacts;
         notifyDataSetChanged();
     }
