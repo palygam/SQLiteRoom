@@ -5,23 +5,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapter.ContactViewHolder> {
     private Context context;
-    private List<Contact> contacts;
-    private LayoutInflater inflater;
+    private List<Contact> contacts = new ArrayList<>();
 
-    public void setContacts(@NotNull List<Contact> contacts) {
+    public void setContacts(@NonNull List<Contact> contacts) {
         this.contacts = contacts;
         notifyDataSetChanged();
     }
 
     public ContactsListAdapter(Context context) {
-        inflater = LayoutInflater.from(context);
         this.context = context;
     }
 
@@ -50,32 +50,15 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
 
     @Override
     public int getItemCount() {
-        if (contacts != null)
-            return contacts.size();
-        else return 0;
+        return contacts.size();
     }
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
-        private final TextView contactLastNameView;
-        private final TextView contactFirstNameView;
-        private final TextView contactMiddleNameView;
-        private final TextView contactAgeView;
+        final TextView contactLastNameView;
+        final TextView contactFirstNameView;
+        final TextView contactMiddleNameView;
+        final TextView contactAgeView;
 
-        public TextView getContactLastNameView() {
-            return contactLastNameView;
-        }
-
-        public TextView getContactFirstNameView() {
-            return contactFirstNameView;
-        }
-
-        public TextView getContactMiddleNameView() {
-            return contactMiddleNameView;
-        }
-
-        public TextView getContactAgeView() {
-            return contactAgeView;
-        }
 
         public ContactViewHolder(View itemView) {
             super(itemView);

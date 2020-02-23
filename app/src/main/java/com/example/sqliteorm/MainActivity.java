@@ -5,18 +5,22 @@ import android.text.TextUtils;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
 
 public class MainActivity extends AppCompatActivity {
     private TextInputEditText textInputLastName;
     private TextInputEditText textInputFirstName;
     private TextInputEditText textInputMiddleName;
     private TextInputEditText textInputAge;
-    private int age;
     private TextInputLayout lastNameWrapper;
     private TextInputLayout ageWrapper;
-
+    private String lastName;
+    private String firstName;
+    private String middleName;
+    private int age;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +38,10 @@ public class MainActivity extends AppCompatActivity {
     private void addButtonMainActivity() {
         final Button buttonSendData = findViewById(R.id.button_send);
         buttonSendData.setOnClickListener(view -> {
-            if (textInputLastName.getText().toString().isEmpty()) {
+            lastName = textInputLastName.getText().toString();
+            firstName = textInputFirstName.getText().toString().substring(0, 1).toUpperCase();
+            middleName = textInputMiddleName.getText().toString().substring(0, 1).toUpperCase();
+            if (lastName.isEmpty()) {
                 lastNameWrapper.setError("Enter your Last Name");
                 return;
             }
@@ -43,18 +50,16 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             age = Integer.parseInt(String.valueOf(textInputAge.getText()));
-            startActivity(buildIntent());
+            insertData();
+            startActivity(new Intent(MainActivity.this, ShowDatabaseActivity.class));
         });
     }
 
-    private Intent buildIntent() {
-        Intent intent = new Intent(MainActivity.this, ShowDatabaseActivity.class);
-        Bundle extras = new Bundle();
-        extras.putString(Constants.LAST_NAME_KEY, textInputLastName.getText().toString());
-        extras.putString(Constants.FIRST_NAME_KEY, textInputFirstName.getText().toString());
-        extras.putString(Constants.MIDDLE_NAME_KEY, textInputMiddleName.getText().toString());
-        extras.putInt(Constants.AGE_KEY, age);
-        intent.putExtras(extras);
-        return intent;
+    private void insertData() {
+        Thread backgroundThread = new Thread(() -> {
+            Contact contact = new Contact(lastName, firstName, middleName, age);
+            AppDatabase.getINSTANCE(MainActivity.this).contactDao().insert(contact);
+        });
+        backgroundThread.start();
     }
 }
