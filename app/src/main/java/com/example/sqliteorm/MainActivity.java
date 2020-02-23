@@ -50,12 +50,12 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             age = Integer.parseInt(String.valueOf(textInputAge.getText()));
-            insertData();
+            insertContacts();
             startActivity(new Intent(MainActivity.this, ShowDatabaseActivity.class));
         });
     }
 
-    private void insertData() {
+    private void insertContacts() {
         Thread backgroundThread = new Thread(() -> {
             Contact contact = new Contact(lastName, firstName, middleName, age);
             AppDatabase.getINSTANCE(MainActivity.this).contactDao().insert(contact);
