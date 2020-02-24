@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SQLiteORM</string>
+    <string name="text_input_last_name">Last Name</string>
+    <string name="text_input_first_name">First Name</string>
+    <string name="text_input_middle_name">Middle Name</string>
+    <string name="text_input_age">Age</string>
+    <string name="button_main_activity">Send</string>
+    <string name="no_information">No Information</string>
+    <string name="show_database_text">Database</string>
+
 </resources>
